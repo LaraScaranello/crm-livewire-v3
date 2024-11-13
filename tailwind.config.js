@@ -1,4 +1,6 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
+import typo from '@tailwindcss/typography';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -8,6 +10,7 @@ export default {
         './resources/**/*.blade.php',
         './resources/**/*.js',
         './resources/**/*.vue',
+        "./src/**/*.{html,js}"
     ],
     theme: {
         extend: {
@@ -16,5 +19,8 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        forms,
+        typo
+    ],
 };

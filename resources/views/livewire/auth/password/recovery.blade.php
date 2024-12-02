@@ -1,4 +1,4 @@
-<x-card title="Login" shadow class="mx-auto w-[450px]">
+<x-card title="Password recovery" shadow class="mx-auto w-[450px]">
 
     @if($message)
         <x-alert icon="o-exclamation-triangle" class="alert-success mb-4 text-sm">

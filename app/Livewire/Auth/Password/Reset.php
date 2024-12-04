@@ -67,11 +67,11 @@ class Reset extends Component
         $this->redirect(route('login'));
     }
 
-    //    #[Computed]
-    //    public function obfuscatedEmail(): string
-    //    {
-    //        return obfuscate_email($this->email);
-    //    }
+    #[Computed]
+    public function obfuscatedEmail(): string
+    {
+        return obfuscate_email($this->email);
+    }
 
     private function tokenNotValid(): bool
     {

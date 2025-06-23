@@ -28,6 +28,10 @@
     </div>
 
     <x-table :headers="$this->headers" :rows="$this->users">
+        @scope('header_name', $header)
+        {{ $header['label'] }}↑
+        @endscope
+
         @scope('cell_permissions', $user)
         @foreach($user->permissions as $permission)
             <x-badge :value="$permission->key" class="badge-primary"/>

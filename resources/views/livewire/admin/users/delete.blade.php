@@ -1,3 +1,5 @@
 <div>
-    {{-- Success is as dangerous as failure. --}}
+    <button wire:click="$set('modal', true)">
+
+    </button>
 </div>

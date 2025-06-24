@@ -24,6 +24,8 @@
 
 {{-- MAIN --}}
 <x-main full-width>
+    <x-toast/>
+
     {{-- SIDEBAR --}}
     <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
 

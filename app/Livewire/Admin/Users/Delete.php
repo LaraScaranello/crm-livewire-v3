@@ -38,6 +38,12 @@ class Delete extends Component
     {
         $this->validate();
 
+        if ($this->user->is(auth()->user())) {
+            $this->addError('confirmation', 'You cannot delete your own account brow');
+
+            return;
+        }
+
         $this->user->delete();
 
         $this->user->notify(new UserDeletedNotification());

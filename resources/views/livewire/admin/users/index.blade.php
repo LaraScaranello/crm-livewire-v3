@@ -52,11 +52,14 @@
         @endforeach
         @endscope
 
-        @scope('actions', $users)
-        @unless($users->trashed())
-            <x-button icon="o-trash" wire:click="delete({{ $users->id }})" spinner class="btn-sm"/>
+        @scope('actions', $user)
+        @unless($user->trashed())
+            <livewire:admin.users.delete
+                :$user
+                wire:key="delete-btn-{{ $user->id }}"
+            />
         @else
-            <x-button icon="o-arrow-path-rounded-square" wire:click="restore({{ $users->id }})" spinner
+            <x-button icon="o-arrow-path-rounded-square" wire:click="restore({{ $user->id }})" spinner
                       class="btn-sm btn-success btn-ghost"/>
         @endunless
         @endscope

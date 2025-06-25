@@ -1,8 +1,8 @@
 <div>
     <x-modal
         wire:model="modal"
-        title="Deletion Cofirmation"
-        subtitle="You are deleting the user {{ $user?->name }}"
+        title="Restore Cofirmation"
+        subtitle="You are restoring access for the user {{ $user?->name }}"
         separator
         class="backdrop-blur">
 
@@ -14,13 +14,13 @@
 
         <x-input
             class="input-sm"
-            label="Write 'DART VADER' to confirm the deletion"
+            label="Write 'YODA' to confirm the restoration"
             wire:model="confirmation_confirmation"
         />
 
         <x-slot:actions>
             <x-button label="Cancel" @click="$wire.modal = false"/>
-            <x-button label="Confirm" class="btn-primary" wire:click="destroy"/>
+            <x-button label="Confirm" class="btn-primary" wire:click="restore"/>
         </x-slot:actions>
     </x-modal>
 </div>

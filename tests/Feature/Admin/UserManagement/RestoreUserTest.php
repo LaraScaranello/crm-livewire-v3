@@ -18,9 +18,12 @@ it('should be able to restore a user', function () {
         ->call('restore')
         ->assertDispatched('user::restored');
 
-    assertNotSoftDeleted('users', [
-        'id' => $forRestoration->id,
-    ]);
+    assertNotSoftDeleted('users', ['id' => $forRestoration->id]);
+
+    $forRestoration->refresh();
+
+    expect($forRestoration)->restored_at->not->toBeNull()
+        ->restoredBy->id->toBe($user->id);
 });
 
 it('should have a confirmation before deletion', function () {
@@ -34,9 +37,7 @@ it('should have a confirmation before deletion', function () {
         ->assertHasErrors(['confirmation' => 'confirmed'])
         ->assertNotDispatched('user::restored');
 
-    assertSoftDeleted('users', [
-        'id' => $forRestoration->id,
-    ]);
+    assertSoftDeleted('users', ['id' => $forRestoration->id]);
 });
 
 it('should send a notification to the user telling him that he has again access to the apllication', function () {

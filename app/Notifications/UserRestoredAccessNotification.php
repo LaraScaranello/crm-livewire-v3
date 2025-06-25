@@ -34,9 +34,8 @@ class UserRestoredAccessNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line('You have again access to the ' . config('app.name'))
+                    ->line('Thank you for using our application! 🖖🏼');
     }
 
     /**

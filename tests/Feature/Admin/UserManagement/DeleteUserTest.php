@@ -18,9 +18,11 @@ it('should be able to delete a user', function () {
         ->call('destroy')
         ->assertDispatched('user::deleted');
 
-    assertSoftDeleted('users', [
-        'id' => $forDeletion->id,
-    ]);
+    assertSoftDeleted('users', ['id' => $forDeletion->id]);
+
+    $forDeletion->refresh();
+
+    expect($forDeletion)->deletedBy->id->toBe($user->id);
 });
 
 it('should have a confirmation before deletion', function () {
@@ -34,9 +36,7 @@ it('should have a confirmation before deletion', function () {
         ->assertHasErrors(['confirmation' => 'confirmed'])
         ->assertNotDispatched('user::deleted');
 
-    assertNotSoftDeleted('users', [
-        'id' => $forDeletion->id,
-    ]);
+    assertNotSoftDeleted('users', ['id' => $forDeletion->id]);
 });
 
 it('should send a notification to the user telling him that he has no long access to the apllication', function () {

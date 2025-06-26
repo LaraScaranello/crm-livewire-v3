@@ -53,24 +53,35 @@
         @endscope
 
         @scope('actions', $user)
-        @unless($user->trashed())
-            @unless($user->is(auth()->user()))
-                <x-button
-                    id="delete-btn-{{ $user->id }}"
-                    wire:key="delete-btn-{{ $user->id }}"
-                    icon="o-trash"
-                    wire:click="destroy('{{ $user->id }}')"
-                    spinner class="btn-sm"
-                />
-            @endunless
-        @else
+        <div class="flex space-x-2 items-center">
             <x-button
-                icon="o-arrow-path-rounded-square"
-                wire:click="restore({{ $user->id }})"
-                spinner
-                class="btn-sm btn-success btn-ghost"
+                id="show-btn-{{ $user->id }}"
+                wire:key="show-btn-{{ $user->id }}"
+                icon="o-eye"
+                wire:click="showUser('{{ $user->id }}')"
+                spinner class="btn-sm"
             />
-        @endunless
+            @can(\App\Enum\Can::BE_AN_ADMIN)
+                @unless($user->trashed())
+                    @unless($user->is(auth()->user()))
+                        <x-button
+                            id="delete-btn-{{ $user->id }}"
+                            wire:key="delete-btn-{{ $user->id }}"
+                            icon="o-trash"
+                            wire:click="destroy('{{ $user->id }}')"
+                            spinner class="btn-sm"
+                        />
+                    @endunless
+                @else
+                    <x-button
+                        icon="o-arrow-path-rounded-square"
+                        wire:click="restore({{ $user->id }})"
+                        spinner
+                        class="btn-sm btn-success btn-ghost"
+                    />
+                @endunless
+            @endcan
+        </div>
         @endscope
     </x-table>
 
@@ -78,4 +89,5 @@
 
     <livewire:admin.users.delete/>
     <livewire:admin.users.restore/>
+    <livewire:admin.users.show/>
 </div>

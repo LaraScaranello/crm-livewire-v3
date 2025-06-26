@@ -45,7 +45,7 @@ test('making sure that the method loadUser has the attribute On', function () {
     $attribute = $attributes[0];
 
     expect($attribute)->getArguments()->toHaveCount(1)
-        ->and($attribute)->getName()->toBe('App\Livewire\Admin\Users\On');
+        ->and($attribute)->getName()->toBe('Livewire\Attributes\On');
 
     $argument = $attribute->getArguments()[0];
 

@@ -3,6 +3,7 @@
 use App\Http\Middleware\HandleImpersonation;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\{Exceptions, Middleware};
+use Illuminate\Session\Middleware\StartSession;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(HandleImpersonation::class);
+        $middleware->group('web', [
+            StartSession::class,
+            HandleImpersonation::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

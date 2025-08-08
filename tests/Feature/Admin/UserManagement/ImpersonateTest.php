@@ -14,7 +14,7 @@ it('should add a key impersonate to the session with the given user', function (
 
     assertTrue(session()->has('impersonate'));
 
-    assertSame(session('impersonate'), $user->id);
+    assertSame(session()->get('impersonate'), $user->id);
 });
 
 it('should make sure that we are logged with the impersonated user', function () {
@@ -26,7 +26,8 @@ it('should make sure that we are logged with the impersonated user', function ()
     expect(auth()->id())->toBe($admin->id);
 
     Livewire::test(Impersonate::class)
-        ->call('impersonate', $user->id);
+        ->call('impersonate', $user->id)
+        ->assertRedirect(route('dashboard'));
 
     get(route('dashboard'))
         ->assertSee(__("You're impersonating :name, click here to stop the impersonation.", ['name' => $user->name]));

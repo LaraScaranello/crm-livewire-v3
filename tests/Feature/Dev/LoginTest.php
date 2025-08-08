@@ -3,7 +3,7 @@
 use App\Livewire\Dev\Login;
 use App\Models\User;
 
-use function Pest\Laravel\assertAuthenticatedAs;
+use function Pest\Laravel\{actingAs, assertAuthenticatedAs, get};
 
 it('should be able to list all users of the system', function () {
     User::factory()->count(10)->create();
@@ -24,4 +24,32 @@ it('should be able to login with any user', function () {
         ->assertRedirect(route('dashboard'));
 
     assertAuthenticatedAs($user);
+});
+
+it('should not load the livewire component on production enviroment', function () {
+    $user = User::factory()->create();
+
+    app()->detectEnvironment(fn () => 'production');
+
+    actingAs($user);
+
+    get(route('dashboard')) // app.blade.php
+        ->assertDontSeeLivewire('dev.login');
+
+    get(route('login')) // guest.blade.php
+        ->assertDontSeeLivewire('dev.login');
+});
+
+it('should load the livewire component on non production enviroment', function () {
+    $user = User::factory()->create();
+
+    app()->detectEnvironment(fn () => 'local');
+
+    actingAs($user);
+
+    get(route('dashboard')) // app.blade.php
+        ->assertSeeLivewire('dev.login');
+
+    get(route('login')) // guest.blade.php
+        ->assertSeeLivewire('dev.login');
 });

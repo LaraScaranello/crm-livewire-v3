@@ -10,11 +10,15 @@
 </head>
 <body class="antialiased font-sans">
 
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-        {{ $slot }}
-    </div>
+@if(!app()->environment('production'))
+    <livewire:dev.login/>
+@endif
 
-    {{--  TOAST area --}}
-    <x-toast />
+<div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
+    {{ $slot }}
+</div>
+
+{{--  TOAST area --}}
+<x-toast/>
 </body>
 </html>

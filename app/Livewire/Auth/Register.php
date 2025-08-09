@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Notifications\WelcomeNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Livewire\Attributes\{Layout, Rule};
 use Livewire\Component;
 
@@ -46,6 +45,6 @@ class Register extends Component
 
         Event(new Registered($user));
 
-        $this->redirect(RouteServiceProvider::HOME);
+        $this->redirect(route('auth.email-validation'));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enum\Can;
+use App\Http\Middleware\ShouldBeVerified;
 use App\Livewire\{Admin, Welcome};
 use App\Livewire\Auth\{Login, Password, Register};
 use Illuminate\Support\Facades\{Route};
@@ -15,7 +16,7 @@ Route::get('/password/reset', Password\Reset::class)->name('password.reset');
 //endregion
 
 //region Authenticated
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', ShouldBeVerified::class])->group(function () {
     Route::get('/', Welcome::class)->name('dashboard');
 
     //region Admin

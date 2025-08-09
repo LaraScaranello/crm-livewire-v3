@@ -8,7 +8,7 @@ use App\Notifications\WelcomeNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 
-use function Pest\Laravel\actingAs;
+use function Pest\Laravel\{actingAs, get};
 use function PHPUnit\Framework\assertTrue;
 
 beforeEach(function () {
@@ -101,5 +101,16 @@ describe('validation page', function () {
             ->validation_code->toBeNull();
 
         Notification::assertSentTo($user, WelcomeNotification::class);
+    });
+});
+
+describe('middleware', function () {
+    it('should redirect to the email-verification if email_verified_at is null and the user is logged in', function () {
+        $user = User::factory()->withValidationCode()->create();
+
+        actingAs($user);
+
+        get(route('dashboard'))
+            ->assertRedirect(route('auth.email-validation'));
     });
 });

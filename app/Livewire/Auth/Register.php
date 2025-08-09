@@ -3,7 +3,6 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
-use App\Notifications\WelcomeNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\{Layout, Rule};
@@ -40,8 +39,6 @@ class Register extends Component
         ]);
 
         auth()->login($user);
-
-        $user->notify(new WelcomeNotification());
 
         Event(new Registered($user));
 

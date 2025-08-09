@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Logout extends Component
@@ -9,12 +10,11 @@ class Logout extends Component
     public function render(): string
     {
         return <<<'BLADE'
-            <button class="btn-circle btn-ghost btn-xs" wire:click="logout">
-                <x-icon name="o-power"/>
-            </button>
+            <div></div>
         BLADE;
     }
 
+    #[On('logout')]
     public function logout(): void
     {
         auth()->logout();

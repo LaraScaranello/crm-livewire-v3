@@ -10,18 +10,6 @@
 </head>
 <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
 
-{{-- NAVBAR mobile only --}}
-<x-nav sticky class="lg:hidden">
-    <x-slot:brand>
-        <x-app-brand/>
-    </x-slot:brand>
-    <x-slot:actions>
-        <label for="main-drawer" class="lg:hidden me-3">
-            <x-icon name="o-bars-3" class="cursor-pointer"/>
-        </label>
-    </x-slot:actions>
-</x-nav>
-
 <x-toast/>
 
 @if(session('impersonate'))
@@ -50,7 +38,11 @@
                 <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover
                              class="-mx-2 !-my-2 rounded">
                     <x-slot:actions>
-                        <livewire:auth.logout/>
+                        <x-button
+                            icon="o-power"
+                            class="btn-circle btn-ghost btn-xs"
+                            @click="$dispatch('logout')">
+                        </x-button>
                     </x-slot:actions>
                 </x-list-item>
 
@@ -68,13 +60,12 @@
         </x-menu>
     </x-slot:sidebar>
 
-    {{-- The `$slot` goes here --}}
     <x-slot:content>
         {{ $slot }}
     </x-slot:content>
 </x-main>
 
-{{--  TOAST area --}}
-<x-toast/>
+<livewire:auth.logout/>
+
 </body>
 </html>

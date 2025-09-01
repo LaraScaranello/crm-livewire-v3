@@ -49,7 +49,9 @@
                 <x-menu-separator/>
             @endif
 
-            <x-menu-item title="Home" icon="o-sparkles" link="/"/>
+            <x-menu-item title="Home" icon="o-home" :link="route('dashboard')"/>
+
+            <x-menu-item title="Customers" icon="o-building-storefront" :link="route('customers')"/>
 
             @can(\App\Enum\Can::BE_AN_ADMIN->value)
                 <x-menu-sub title="Admin" icon="o-lock-closed">

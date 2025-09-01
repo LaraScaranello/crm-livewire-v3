@@ -2,7 +2,7 @@
 
 use App\Enum\Can;
 use App\Http\Middleware\ShouldBeVerified;
-use App\Livewire\{Admin, Welcome};
+use App\Livewire\{Admin, Customers, Welcome};
 use App\Livewire\Auth\{EmailValidation, Login, Password, Register};
 use Illuminate\Support\Facades\{Route};
 
@@ -19,12 +19,15 @@ Route::get('/password/reset', Password\Reset::class)->name('password.reset');
 Route::middleware(['auth', ShouldBeVerified::class])->group(function () {
     Route::get('/', Welcome::class)->name('dashboard');
 
+    //region Customers
+    Route::get('/customers', Customers\Index::class)->name('customers');
+    //endregion
+
     //region Admin
     Route::prefix('/admin')->middleware('can:' . Can::BE_AN_ADMIN->value)->group(function () {
         Route::get('/dashboard', Admin\Dashboard::class)->name('admin.dashboard');
         Route::get('/users', Admin\Users\Index::class)->name('admin.users');
     });
-
     //endregion
 });
 //endregion

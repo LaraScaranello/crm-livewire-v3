@@ -45,14 +45,10 @@ class Index extends Component
         $this->resetPage();
     }
 
-    #[Computed]
-    public function users(): LengthAwarePaginator
+    public function query(): Builder
     {
-        $this->validate(['search_permissions' => 'exists:permissions,id']);
-
         return User::query()
             ->with('permissions')
-            ->search($this->search, ['name', 'email'])
             ->when(
                 $this->search_permissions,
                 fn (Builder $q) => $q->whereHas('permissions', function (Builder $query) {
@@ -62,9 +58,12 @@ class Index extends Component
             ->when(
                 $this->search_trash,
                 fn (Builder $q) => $q->onlyTrashed()
-            )
-            ->orderBy($this->sortColumnBy, $this->sortDirection)
-            ->paginate($this->perPage);
+            );
+    }
+
+    public function searchColumns(): array
+    {
+        return ['name', 'email'];
     }
 
     #[Computed]
@@ -84,12 +83,6 @@ class Index extends Component
             ->when($value, fn (Builder $q) => $q->where('key', 'like', "%$value%"))
             ->orderBy('key')
             ->get();
-    }
-
-    public function sortBy(string $column, string $direction): void
-    {
-        $this->sortColumnBy  = $column;
-        $this->sortDirection = $direction;
     }
 
     public function destroy(int $userId): void

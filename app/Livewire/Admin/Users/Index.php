@@ -4,6 +4,8 @@ namespace App\Livewire\Admin\Users;
 
 use App\Enum\Can;
 use App\Models\{Permission, User};
+use App\Support\Table\Header;
+use App\Traits\Livewire\HasTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\{Builder, Collection};
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -18,20 +20,13 @@ use Livewire\{Attributes\On, Component, WithPagination};
 class Index extends Component
 {
     use WithPagination;
-
-    public ?string $search = null;
+    use HasTable;
 
     public array $search_permissions = [];
 
     public bool $search_trash = false;
 
     public Collection $permissionsToSearch;
-
-    public string $sortDirection = 'asc';
-
-    public string $sortColumnBy = 'id';
-
-    public int $perPage = 15;
 
     public function mount(): void
     {
@@ -87,13 +82,13 @@ class Index extends Component
     }
 
     #[Computed]
-    public function headers(): array
+    public function tableHeaders(): array
     {
         return [
-            ['key' => 'id', 'label' => '#', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
-            ['key' => 'name', 'label' => 'Name', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
-            ['key' => 'email', 'label' => 'Email', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
-            ['key' => 'permissions', 'label' => 'Permissions', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
+            Header::make('id', '#'),
+            Header::make('name', 'Name'),
+            Header::make('email', 'Email'),
+            Header::make('permissions', 'Permissions'),
         ];
     }
 

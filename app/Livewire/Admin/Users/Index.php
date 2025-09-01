@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Livewire\Admin\Users;
+
+use App\Enum\Can;
+use App\Models\{Permission, User};
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\{Builder, Collection};
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Computed;
+use Livewire\{Attributes\On, Component, WithPagination};
+
+/**
+ * @property-read LengthAwarePaginator|User[] $users
+ * @property-read array $headers
+ */
+class Index extends Component
+{
+    use WithPagination;
+
+    public ?string $search = null;
+
+    public array $search_permissions = [];
+
+    public bool $search_trash = false;
+
+    public Collection $permissionsToSearch;
+
+    public string $sortDirection = 'asc';
+
+    public string $sortColumnBy = 'id';
+
+    public int $perPage = 15;
+
+    public function mount(): void
+    {
+        $this->authorize(Can::BE_AN_ADMIN->value);
+        $this->filterPermissions();
+    }
+
+    #[On('user::deleted')]
+    #[On('user::restored')]
+    public function render(): View
+    {
+        return view('livewire.admin.users.index');
+    }
+
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }
+
+    #[Computed]
+    public function users(): LengthAwarePaginator
+    {
+        $this->validate(['search_permissions' => 'exists:permissions,id']);
+
+        return User::query()
+            ->with('permissions')
+            ->when(
+                $this->search,
+                fn (Builder $q) => $q
+                    ->where(
+                        DB::raw('lower(name)'),
+                        'like',
+                        strtolower("%$this->search%")
+                    )
+                    ->orWhere(
+                        DB::raw('lower(email)'),
+                        'like',
+                        strtolower("%$this->search%")
+                    )
+            )
+            ->when(
+                $this->search_permissions,
+                fn (Builder $q) => $q->whereHas('permissions', function (Builder $query) {
+                    $query->whereIn('id', $this->search_permissions);
+                })
+            )
+            ->when(
+                $this->search_trash,
+                fn (Builder $q) => $q->onlyTrashed()
+            )
+            ->orderBy($this->sortColumnBy, $this->sortDirection)
+            ->paginate($this->perPage);
+    }
+
+    #[Computed]
+    public function headers(): array
+    {
+        return [
+            ['key' => 'id', 'label' => '#', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
+            ['key' => 'name', 'label' => 'Name', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
+            ['key' => 'email', 'label' => 'Email', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
+            ['key' => 'permissions', 'label' => 'Permissions', 'sortColumnBy' => $this->sortColumnBy, 'sortDirection' => $this->sortDirection],
+        ];
+    }
+
+    public function filterPermissions(?string $value = null): void
+    {
+        $this->permissionsToSearch = Permission::query()
+            ->when($value, fn (Builder $q) => $q->where('key', 'like', "%$value%"))
+            ->orderBy('key')
+            ->get();
+    }
+
+    public function sortBy(string $column, string $direction): void
+    {
+        $this->sortColumnBy  = $column;
+        $this->sortDirection = $direction;
+    }
+
+    public function destroy(int $userId): void
+    {
+        $this->dispatch('user::deletion', userId: $userId)->to('admin.users.delete');
+    }
+
+    public function impersonate(int $userId): void
+    {
+        $this->dispatch('user::impersonation', userId: $userId)->to('admin.users.impersonate');
+    }
+
+    public function restore(int $userId): void
+    {
+        $this->dispatch('user::restoring', userId: $userId)->to('admin.users.restore');
+    }
+
+    public function showUser(int $id): void
+    {
+        $this->dispatch('user::show', id: $id)->to('admin.users.show');
+    }
+}

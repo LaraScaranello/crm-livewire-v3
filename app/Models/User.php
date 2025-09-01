@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Traits\Models\HasPermissions;
+use App\Traits\Models\{HasPermissions, HasSearch};
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +21,7 @@ class User extends Authenticatable implements Auditable
     use HasPermissions;
     use SoftDeletes;
     use AuditableTrait;
+    use HasSearch;
 
     protected $fillable = [
         'name',

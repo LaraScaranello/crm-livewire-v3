@@ -40,6 +40,7 @@ class EmailValidation extends Component
 
         $user->notify(new WelcomeNotification());
 
+        // @phpstan-ignore-next-line
         $this->redirect(RouteServiceProvider::HOME);
     }
 

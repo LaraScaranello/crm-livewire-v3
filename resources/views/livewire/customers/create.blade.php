@@ -9,7 +9,7 @@
 
         <x-slot:actions>
             <x-button label="Cancel" @click="$wire.modal = false"/>
-            <x-button label="Save" type="submit" form="create-customer-form"/>
+            <x-button label="Save" type="submit" form="create-customer-form" class="btn-primary"/>
         </x-slot:actions>
     </x-form>
 

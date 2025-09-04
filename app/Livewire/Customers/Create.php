@@ -4,7 +4,7 @@ namespace App\Livewire\Customers;
 
 use App\Models\Customer;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\{On, Rule};
 use Livewire\Component;
 
 class Create extends Component
@@ -18,9 +18,18 @@ class Create extends Component
     #[Rule(['required_without:email', 'unique:customers'])]
     public string $phone = '';
 
+    public bool $modal = false;
+
     public function render(): View
     {
         return view('livewire.customers.create');
+    }
+
+    #[On('customer::create')]
+    public function open(): void
+    {
+        $this->resetErrorBag();
+        $this->modal = true;
     }
 
     public function save(): void
@@ -28,9 +37,12 @@ class Create extends Component
         $this->validate();
 
         $customer = Customer::create([
+            'type'  => 'customer',
             'name'  => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
         ]);
+
+        $this->modal = false;
     }
 }

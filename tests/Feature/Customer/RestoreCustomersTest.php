@@ -11,7 +11,8 @@ it('should be able to restore a customer', function () {
 
     Livewire::test(Customers\Restore::class)
         ->set('customer', $customer)
-        ->call('restore');
+        ->call('restore')
+        ->assertMethodWired('restore');
 
     assertNotSoftDeleted('customers', [
         'id' => $customer->id,
@@ -24,7 +25,8 @@ test('when confirming we should load the customer and set modal to true', functi
     Livewire::test(Customers\Restore::class)
         ->call('confirmAction', $customer->id)
         ->assertSet('customer.id', $customer->id)
-        ->assertSet('modal', true);
+        ->assertSet('modal', true)
+        ->assertPropertyEntangled('modal');
 });
 
 test('after restoring we should dispatch an event to tell the list to reload', function () {
@@ -33,6 +35,7 @@ test('after restoring we should dispatch an event to tell the list to reload', f
     Livewire::test(Customers\Restore::class)
         ->set('customer', $customer)
         ->call('restore')
+        ->assertMethodWired('restore')
         ->assertDispatched('customer::reload');
 });
 
@@ -42,5 +45,16 @@ test('after restoring we should close the modal', function () {
     Livewire::test(Customers\Restore::class)
         ->set('customer', $customer)
         ->call('restore')
+        ->assertMethodWired('restore')
         ->assertSet('modal', false);
+});
+
+test('making sure restore method is wired', function () {
+    Livewire::test(Customers\Restore::class)
+        ->assertMethodWired('restore');
+});
+
+test('check if component is in the page', function () {
+    Livewire::test(Customers\Index::class)
+        ->assertContainsLivewireComponent('customers.restore');
 });

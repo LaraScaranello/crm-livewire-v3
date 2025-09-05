@@ -14,9 +14,13 @@ beforeEach(function () {
 it('should be able to create a customer', function () {
     Livewire::test(Customers\Create::class)
         ->set('name', 'John Doe')
+        ->assertPropertyWired('name')
         ->set('email', 'joe@doe.com')
+        ->assertPropertyWired('email')
         ->set('phone', '123456789')
+        ->assertPropertyWired('phone')
         ->call('save')
+        ->assertMethodWiredToForm('save')
         ->assertHasNoErrors();
 
     assertDatabaseHas('customers', [
@@ -32,6 +36,7 @@ describe('validations', function () {
         Livewire::test(Customers\Create::class)
             ->set('name', $value)
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasErrors(['name' => $rule]);
     })->with([
         'required' => ['required', ''],
@@ -44,12 +49,14 @@ describe('validations', function () {
             ->set('email', '')
             ->set('phone', '')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasErrors(['email' => 'required_without']);
 
         Livewire::test(Customers\Create::class)
             ->set('email', '')
             ->set('phone', '1232132')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasNoErrors(['email' => 'required_without']);
     });
 
@@ -57,11 +64,13 @@ describe('validations', function () {
         Livewire::test(Customers\Create::class)
             ->set('email', 'invalid-email')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasErrors(['email' => 'email']);
 
         Livewire::test(Customers\Create::class)
             ->set('email', 'joe@doe.com')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasNoErrors(['email' => 'email']);
     });
 
@@ -71,6 +80,7 @@ describe('validations', function () {
         Livewire::test(Customers\Create::class)
             ->set('email', 'joe@doe.com')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasErrors(['email' => 'unique']);
     });
 
@@ -79,12 +89,14 @@ describe('validations', function () {
             ->set('email', '')
             ->set('phone', '')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasErrors(['phone' => 'required_without']);
 
         Livewire::test(Customers\Create::class)
             ->set('email', 'joe@doe.com')
             ->set('phone', '')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasNoErrors(['phone' => 'required_without']);
     });
 
@@ -95,7 +107,13 @@ describe('validations', function () {
         Livewire::test(Customers\Create::class)
             ->set('phone', '123456789')
             ->call('save')
+            ->assertMethodWiredToForm('save')
             ->assertHasErrors(['phone' => 'unique']);
 
     });
+});
+
+test('check if component is in the page', function () {
+    Livewire::test(Customers\Index::class)
+        ->assertContainsLivewireComponent('customers.create');
 });

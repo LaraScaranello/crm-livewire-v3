@@ -12,7 +12,8 @@ it('should be able to archive a customer', function () {
 
     Livewire::test(Customers\Archive::class)
         ->set('customer', $customer)
-        ->call('archive');
+        ->call('archive')
+        ->assertMethodWired('archive');
 
     assertSoftDeleted('customers', [
         'id' => $customer->id,
@@ -34,6 +35,7 @@ test('after archiving we should dispatch an event to tell the list to reload', f
     Livewire::test(Customers\Archive::class)
         ->set('customer', $customer)
         ->call('archive')
+        ->assertMethodWired('archive')
         ->assertDispatched('customer::reload');
 });
 
@@ -43,6 +45,7 @@ test('after archiving we should close the modal', function () {
     Livewire::test(Customers\Archive::class)
         ->set('customer', $customer)
         ->call('archive')
+        ->assertMethodWired('archive')
         ->assertSet('modal', false);
 });
 
@@ -71,4 +74,14 @@ it('should list archived items', function () {
 
             return true;
         });
+});
+
+test('making sure archive method is wired', function () {
+    Livewire::test(Customers\Archive::class)
+        ->assertMethodWired('archive');
+});
+
+test('check if component is in the page', function () {
+    Livewire::test(Customers\Index::class)
+        ->assertContainsLivewireComponent('customers.archive');
 });

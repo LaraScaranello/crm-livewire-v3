@@ -16,6 +16,7 @@ it('should be able to delete a user', function () {
         ->set('user', $forDeletion)
         ->set('confirmation_confirmation', 'DART VADER')
         ->call('destroy')
+        ->assertMethodWired('destroy')
         ->assertDispatched('user::deleted');
 
     assertSoftDeleted('users', ['id' => $forDeletion->id]);
@@ -33,6 +34,7 @@ it('should have a confirmation before deletion', function () {
     Livewire::test(Admin\Users\Delete::class)
         ->set('user', $forDeletion)
         ->call('destroy')
+        ->assertMethodWired('destroy')
         ->assertHasErrors(['confirmation' => 'confirmed'])
         ->assertNotDispatched('user::deleted');
 
@@ -49,7 +51,8 @@ it('should send a notification to the user telling him that he has no long acces
     Livewire::test(Admin\Users\Delete::class)
         ->set('user', $forDeletion)
         ->set('confirmation_confirmation', 'DART VADER')
-        ->call('destroy');
+        ->call('destroy')
+        ->assertMethodWired('destroy');
 
     Notification::assertSentTo($forDeletion, UserDeletedNotification::class);
 });
@@ -62,10 +65,18 @@ it('should not be possible to delet the logged user', function () {
         ->set('user', $user)
         ->set('confirmation_confirmation', 'DART VADER')
         ->call('destroy')
+        ->assertMethodWired('destroy')
         ->assertHasErrors(['confirmation'])
         ->assertNotDispatched('user::deleted');
 
     assertNotSoftDeleted('users', [
         'id' => $user->id,
     ]);
+});
+
+test('check if component is in the page', function () {
+    actingAs(User::factory()->admin()->create());
+
+    Livewire::test(Admin\Users\Index::class)
+        ->assertContainsLivewireComponent('admin.users.delete');
 });

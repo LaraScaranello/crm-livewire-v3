@@ -15,6 +15,12 @@
                 :options="[['id'=>5,'name'=>'5'],['id'=>15,'name'=>'15'],['id'=>25,'name'=>'25'],['id'=>50,'name'=>'50']]"
                 placeholder="Records per page"
             />
+            <x-checkbox
+                label="Show archived customers"
+                wire:model.live="search_trash"
+                class="checkbox-primary"
+                right tight
+            />
         </div>
 
         <x-button @click="$dispatch('customer::create')" label="New Customer" icon="o-plus"/>

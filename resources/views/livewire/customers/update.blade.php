@@ -2,9 +2,9 @@
 
     <x-form wire:submit="save" id="update-customer-form">
         <div class="space-y-3">
-            <x-input label="Name" wire:model="customer.name"/>
-            <x-input label="Email" wire:model="customer.email"/>
-            <x-input label="Phone" wire:model="customer.phone"/>
+            <x-input label="Name" wire:model="form.name"/>
+            <x-input label="Email" wire:model="form.email"/>
+            <x-input label="Phone" wire:model="form.phone"/>
         </div>
 
         <x-slot:actions>

@@ -90,6 +90,13 @@ describe('validations', function () {
             ->call('save')
             ->assertMethodWiredToForm('save')
             ->assertHasErrors(['form.email' => 'unique']);
+
+        Livewire::test(Customers\Update::class)
+            ->call('load', $this->customer->id)
+            ->set('form.email', $this->customer->email)
+            ->call('save')
+            ->assertMethodWiredToForm('save')
+            ->assertHasNoErrors(['form.email' => 'unique']);
     });
 
     test('phone should be required if email is empty', function () {
@@ -120,6 +127,13 @@ describe('validations', function () {
             ->call('save')
             ->assertMethodWiredToForm('save')
             ->assertHasErrors(['form.phone' => 'unique']);
+
+        Livewire::test(Customers\Update::class)
+            ->call('load', $this->customer->id)
+            ->set('form.phone', $this->customer->phone)
+            ->call('save')
+            ->assertMethodWiredToForm('save')
+            ->assertHasNoErrors(['form.phone' => 'unique']);
 
     });
 });

@@ -1,3 +1,13 @@
 <div>
-    {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
+    <x-modal
+        wire:model="modal"
+        title="Archive Cofirmation"
+        subtitle="You are archiving the opportunity {{ $opportunity?->title }}"
+        class="backdrop-blur">
+
+        <x-slot:actions>
+            <x-button label="Hum... no" @click="$wire.modal = false"/>
+            <x-button label="Yes, I am" class="btn-primary" wire:click="archive"/>
+        </x-slot:actions>
+    </x-modal>
 </div>

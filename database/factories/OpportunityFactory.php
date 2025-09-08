@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Traits\Factory\HasDeleted;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,6 +15,9 @@ class OpportunityFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    use HasDeleted;
+
     public function definition(): array
     {
         return [

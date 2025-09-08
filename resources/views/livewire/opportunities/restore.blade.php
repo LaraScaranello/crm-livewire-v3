@@ -1,3 +1,13 @@
 <div>
-    {{-- A good traveler has no fixed plans and is not intent upon arriving. --}}
+    <x-modal
+        wire:model="modal"
+        title="Restore Cofirmation"
+        subtitle="You are restoring the opportunity {{ $opportunity?->title }}"
+        class="backdrop-blur">
+
+        <x-slot:actions>
+            <x-button label="Hum... no" @click="$wire.modal = false"/>
+            <x-button label="Yes, I am" class="btn-primary" wire:click="restore"/>
+        </x-slot:actions>
+    </x-modal>
 </div>

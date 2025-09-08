@@ -14,7 +14,7 @@ class Form extends BaseForm
     public string $title = '';
 
     #[Validate(['required', 'in:open,won,lost'])]
-    public string $status = '';
+    public string $status = 'open';
 
     #[Validate(['required'])]
     public ?string $amount = null;
@@ -48,7 +48,7 @@ class Form extends BaseForm
         $this->opportunity->update([
             'title'  => $this->title,
             'status' => $this->status,
-            'amount' => $this->amount,
+            'amount' => (string) $this->amount,
         ]);
     }
 }

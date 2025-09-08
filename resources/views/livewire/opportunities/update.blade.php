@@ -12,8 +12,7 @@
                 ]"
                 wire:model="form.status"
             />
-            <x-input label="Amount" wire:model="form.amount"
-                     prefix="R$" locale="pt-BR" money/>
+            <x-input label="Amount" wire:model="form.amount" prefix="R$" locale="pt-BR"/>
         </div>
         <x-slot:actions>
             <x-button label="Cancel" @click="$wire.modal = false"/>

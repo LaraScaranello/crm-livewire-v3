@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Opportunity;
 use Illuminate\Database\Seeder;
 
 class OpportunitySeeder extends Seeder
@@ -11,6 +12,6 @@ class OpportunitySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Opportunity::factory(150)->create();
     }
 }

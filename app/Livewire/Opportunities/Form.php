@@ -25,7 +25,9 @@ class Form extends BaseForm
 
         $this->title  = $opportunity->title;
         $this->status = $opportunity->status;
-        $this->amount = (string) $opportunity->amount;
+        $this->amount = $opportunity->amount !== null
+            ? number_format($opportunity->amount / 100, 2, ',', '')
+            : null;
     }
 
     public function create(): void
@@ -35,7 +37,7 @@ class Form extends BaseForm
         Opportunity::create([
             'title'  => $this->title,
             'status' => $this->status,
-            'amount' => $this->amount,
+            'amount' => $this->getAmountAsInt(),
         ]);
 
         $this->reset();
@@ -45,10 +47,21 @@ class Form extends BaseForm
     {
         $this->validate();
 
-        $this->opportunity->update([
-            'title'  => $this->title,
-            'status' => $this->status,
-            'amount' => (string) $this->amount,
-        ]);
+        $this->opportunity->title  = $this->title;
+        $this->opportunity->status = $this->status;
+        $this->opportunity->amount = $this->getAmountAsInt();
+
+        $this->opportunity->update();
+    }
+
+    private function getAmountAsInt(): int
+    {
+        $amount = $this->amount;
+
+        if ($amount === null) {
+            $amount = 0;
+        }
+
+        return (int) ($amount * 100);
     }
 }

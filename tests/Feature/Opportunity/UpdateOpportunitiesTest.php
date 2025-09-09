@@ -28,7 +28,7 @@ it('should be able to update a opportunity', function () {
         'id'     => $this->opportunity->id,
         'title'  => 'John Doe',
         'status' => 'won',
-        'amount' => '123.45',
+        'amount' => '12345',
     ]);
 });
 

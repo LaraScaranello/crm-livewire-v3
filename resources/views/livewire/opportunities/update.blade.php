@@ -2,6 +2,7 @@
     <x-form wire:submit="save" id="update-opportunity-form">
         <hr class="my-5"/>
         <div class="space-y-2">
+            <x-choices label="Customer" wire:model="form.customer_id" single searchable :options="$form->customers"/>
             <x-input label="Title" wire:model="form.title"/>
             <x-select
                 label="Status"

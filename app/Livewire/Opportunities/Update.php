@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Opportunities;
 
-use App\Models\Opportunity;
+use App\Models\{Opportunity};
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -34,5 +34,10 @@ class Update extends Component
 
         $this->modal = false;
         $this->dispatch('opportunity::reload')->to('opportunities.index');
+    }
+
+    public function search(string $value = ''): void
+    {
+        $this->form->searchCustomers($value);
     }
 }

@@ -26,11 +26,10 @@ class Form extends BaseForm
     {
         $this->opportunity = $opportunity;
 
-        $this->title  = $opportunity->title;
-        $this->status = $opportunity->status;
-        $this->amount = $opportunity->amount !== null
-            ? number_format($opportunity->amount / 100, 2, ',', '')
-            : null;
+        $this->customer_id = $opportunity->customer_id;
+        $this->title       = $opportunity->title;
+        $this->status      = $opportunity->status;
+        $this->amount      = (string) $opportunity->amount / 100;
     }
 
     public function create(): void
@@ -51,9 +50,10 @@ class Form extends BaseForm
     {
         $this->validate();
 
-        $this->opportunity->title  = $this->title;
-        $this->opportunity->status = $this->status;
-        $this->opportunity->amount = $this->getAmountAsInt();
+        $this->opportunity->customer_id = $this->customer_id;
+        $this->opportunity->title       = $this->title;
+        $this->opportunity->status      = $this->status;
+        $this->opportunity->amount      = $this->getAmountAsInt();
 
         $this->opportunity->update();
     }

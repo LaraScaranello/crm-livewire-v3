@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Opportunities;
 
-use App\Models\Opportunity;
+use App\Models\{Customer, Opportunity};
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -12,6 +13,8 @@ class Update extends Component
     public Form $form;
 
     public bool $modal = false;
+
+    public Collection|array $customers = [];
 
     public function render(): View
     {
@@ -25,6 +28,7 @@ class Update extends Component
         $this->form->setOpportunity($opportunity);
 
         $this->form->resetErrorBag();
+        $this->search();
         $this->modal = true;
     }
 
@@ -34,5 +38,17 @@ class Update extends Component
 
         $this->modal = false;
         $this->dispatch('opportunity::reload')->to('opportunities.index');
+    }
+
+    public function search(string $value = ''): void
+    {
+        $this->customers = Customer::query()
+            ->where('name', 'LIKE', "%{$value}%")
+            ->take(5)
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->merge(
+                Customer::query()->whereId($this->form->customer_id)->get(['id', 'name'])
+            );
     }
 }
